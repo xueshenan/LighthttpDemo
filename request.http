@@ -9,6 +9,15 @@ POST {{Host}}/login
 Content-Type: application/json
 
 {
-    username : "anxs",
-    password : "111"
+    "username": "anxs",
+    "password": "111"
+}
+
+### set wifi password
+POST {{Host}}/change_wifi_password
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpYXQiOjE2ODg1NDg4NDMsImlzcyI6ImF1dGgwIiwidXNlcm5hbWUiOiJhbnhzIn0.cLyuocpXmYFNo4XJ1lQU_lkHJravt57N71WNJMaCrlo",
+    "password": "111"
 }

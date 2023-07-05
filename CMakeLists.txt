@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(EXECUTE_NAME fcgi_server.fcgi)
 
 add_executable(${EXECUTE_NAME}
-    fcgi_server.cpp)
+    fcgi_server.cpp
+    authenticate.cpp)
 
 find_package(jsoncpp REQUIRED)
 target_link_libraries(${EXECUTE_NAME} PRIVATE jsoncpp_lib)
@@ -19,3 +20,11 @@ pkg_check_modules(fcgi fcgi REQUIRED IMPORTED_TARGET)
 target_include_directories(${EXECUTE_NAME} PRIVATE ${fcgi_INCLUDEDIR})
 
 target_link_libraries(${EXECUTE_NAME} PRIVATE PkgConfig::fcgi)
+
+find_package(OpenSSL)
+target_include_directories(${EXECUTE_NAME} PRIVATE "third_party/jwt-cpp/include/")
+target_link_libraries(${EXECUTE_NAME} PRIVATE OpenSSL::Crypto)
+
+add_executable(a.out
+    test.cpp)
+target_link_libraries(a.out PRIVATE jsoncpp_lib)
