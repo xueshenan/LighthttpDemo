@@ -7,11 +7,20 @@
 #include <string>
 
 #include "authenticate.h"
+#include "wifi_operation.h"
 
 static const std::string k_url_prefix = "/api/v1/";
 
 static void send_message(FCGX_Stream *out, const std::string &message);
 static void quit_with_message(FCGX_Stream *out, int code, const char *message);
+
+enum class OperationType {
+    OperationTypeGetWifiInfo,
+    OperationTypeSetSsid,
+    OperationTypeSetPassword,
+    OperationTypeSetChannel,
+    OperationTypeUnsupport,
+};
 
 int main(int argc, const char *argv[]) {
     Authenticate authenticate;
@@ -99,7 +108,15 @@ int main(int argc, const char *argv[]) {
             Json::StyledWriter styled_writer;
             send_message(out, styled_writer.write(result));
         } else {  // operation
-            if (request_uri == k_url_prefix + "change_wifi_password") {
+            OperationType operation_type = OperationType::OperationTypeUnsupport;
+            if (request_uri == k_url_prefix + "get_wifi_info") {
+                operation_type = OperationType::OperationTypeGetWifiInfo;
+            } else if (request_uri == k_url_prefix + "set_wifi_ssid") {
+                operation_type = OperationType::OperationTypeSetSsid;
+            } else if (request_uri == k_url_prefix + "set_wifi_password") {
+                operation_type = OperationType::OperationTypeSetPassword;
+            } else if (request_uri == k_url_prefix + "set_wifi_channel") {
+                operation_type = OperationType::OperationTypeSetChannel;
             } else {
                 std::string build_string = "Invalid request " + request_uri;
                 quit_with_message(out, 400, build_string.c_str());
@@ -123,10 +140,44 @@ int main(int argc, const char *argv[]) {
                 continue;
             }
 
-            Json::Value result;
-            result["result"] = "OK";
+            WifiOperation wifi_operation;
+            Json::Value message;
+            message["result"] = "OK";
+            if (operation_type == OperationType::OperationTypeGetWifiInfo) {
+                WifiInfo wifi_info;
+                WifiOperation::Result result = wifi_operation.get_wifi_info(wifi_info);
+                if (result != WifiOperation::Result::ResultOk) {
+                    message["result"] = "Failed";
+                    message["message"] = wifi_operation.get_last_error();
+                } else {
+                    message["ssid"] = wifi_info.ssid;
+                    message["password"] = wifi_info.password;
+                    message["channel"] = wifi_info.channel;
+                }
+            } else if (operation_type == OperationType::OperationTypeSetSsid) {
+                WifiOperation::Result result =
+                    wifi_operation.set_wifi_ssid(root["ssid"].asString());
+                if (result != WifiOperation::Result::ResultOk) {
+                    message["result"] = "Failed";
+                    message["message"] = wifi_operation.get_last_error();
+                }
+            } else if (operation_type == OperationType::OperationTypeSetPassword) {
+                WifiOperation::Result result =
+                    wifi_operation.set_wifi_password(root["password"].asString());
+                if (result != WifiOperation::Result::ResultOk) {
+                    message["result"] = "Failed";
+                    message["message"] = wifi_operation.get_last_error();
+                }
+            } else if (operation_type == OperationType::OperationTypeSetChannel) {
+                WifiOperation::Result result =
+                    wifi_operation.set_wifi_channel(root["channel"].asInt());
+                if (result != WifiOperation::Result::ResultOk) {
+                    message["result"] = "Failed";
+                    message["message"] = wifi_operation.get_last_error();
+                }
+            }
             Json::StyledWriter styled_writer;
-            send_message(out, styled_writer.write(result));
+            send_message(out, styled_writer.write(message));
         }
     }
 

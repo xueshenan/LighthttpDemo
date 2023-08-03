@@ -9,7 +9,8 @@ SET(EXECUTE_NAME fcgi_server.fcgi)
 
 add_executable(${EXECUTE_NAME}
     fcgi_server.cpp
-    authenticate.cpp)
+    authenticate.cpp
+    wifi_operation.cpp)
 
 find_package(jsoncpp REQUIRED)
 target_link_libraries(${EXECUTE_NAME} PRIVATE jsoncpp_lib)
@@ -25,6 +26,6 @@ find_package(OpenSSL)
 target_include_directories(${EXECUTE_NAME} PRIVATE "third_party/jwt-cpp/include/")
 target_link_libraries(${EXECUTE_NAME} PRIVATE OpenSSL::Crypto)
 
-add_executable(a.out
-    test.cpp)
-target_link_libraries(a.out PRIVATE jsoncpp_lib)
+# add_executable(a.out
+#     test.cpp)
+# target_link_libraries(a.out PRIVATE jsoncpp_lib)

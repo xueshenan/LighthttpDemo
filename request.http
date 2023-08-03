@@ -13,11 +13,37 @@ Content-Type: application/json
     "password": "111"
 }
 
-### set wifi password
-POST {{Host}}/change_wifi_password
+### get wifi info
+POST {{Host}}/get_wifi_info
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpYXQiOjE2ODg1NDg4NDMsImlzcyI6ImF1dGgwIiwidXNlcm5hbWUiOiJhbnhzIn0.cLyuocpXmYFNo4XJ1lQU_lkHJravt57N71WNJMaCrlo",
-    "password": "111"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODg2Mzg2MDksImlzcyI6ImF1dGgwIiwidXNlcm5hbWUiOiJhbnhzIn0.CS1N5uMorVvteSFZ_CnPlPRsQLwOhdN2R6-xRfJ3V2g",
+}
+
+### set wifi ssid
+POST {{Host}}/set_wifi_ssid
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODg2Mzg2MDksImlzcyI6ImF1dGgwIiwidXNlcm5hbWUiOiJhbnhzIn0.CS1N5uMorVvteSFZ_CnPlPRsQLwOhdN2R6-xRfJ3V2g",
+    "ssid": "Lacewings123"
+}
+
+### set wifi password
+POST {{Host}}/set_wifi_password
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODg2Mzg2MDksImlzcyI6ImF1dGgwIiwidXNlcm5hbWUiOiJhbnhzIn0.CS1N5uMorVvteSFZ_CnPlPRsQLwOhdN2R6-xRfJ3V2g",
+    "password": "11111111"
+}
+
+### set wifi channel
+POST {{Host}}/set_wifi_channel
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODg2Mzg2MDksImlzcyI6ImF1dGgwIiwidXNlcm5hbWUiOiJhbnhzIn0.CS1N5uMorVvteSFZ_CnPlPRsQLwOhdN2R6-xRfJ3V2g",
+    "channel": 161
 }
